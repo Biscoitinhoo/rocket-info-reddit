@@ -1,15 +1,6 @@
 from credentials.api_keys import APIKeys
-import praw
 
-reddit = praw.Reddit(
-    client_id=APIKeys.return_client_id(),
-    client_secret=APIKeys.return_secret_id(),
-    username=APIKeys.return_username(),
-    password=APIKeys.return_password(),
-    user_agent=APIKeys.return_user_agent(),
-)
-
-subreddit = reddit.subreddit('TrainingBots')
+subreddit = APIKeys.reddit.subreddit('TrainingBots')
 hot_posts = subreddit.hot(limit=5)
 
 already_answered = None
