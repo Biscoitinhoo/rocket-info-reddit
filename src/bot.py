@@ -47,6 +47,7 @@ def answer_about(ask):
                 '>Description: ' +
                 str(get_rocket('falcon 9').description) + '    \n'
             )
+            mention.mark_read()
             print("Answered it!")
 
 
