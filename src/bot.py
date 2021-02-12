@@ -1,5 +1,7 @@
 import praw
+from service.service import Service
 
+# reddit credentials
 reddit = praw.Reddit(
     client_id='x',
     client_secret='x',
@@ -8,8 +10,14 @@ reddit = praw.Reddit(
     user_agent='x',
 )
 
+# initial configs
 subreddit = reddit.subreddit('TrainingBots')
 hot_posts = subreddit.hot(limit=None)
+
+
+# http requests
+def get_rocket(name):
+    return Service.get_rocket(name)
 
 
 # prefix (already lowercase)
@@ -28,13 +36,18 @@ def answer_about(ask):
 
     if ask == 'falcon 9':
         print('Someone asked about Falcon 9! :D')
-        # worked
-        mention.reply(
-            '| Cost per launch | $66, 000 |    \n' +
-            '| Cost of production | $100, 000 |    \n'
-        )
-        mention.mark_read()
-        print("Answered it!")
+
+        if get_rocket('falcon 9').name != '':
+            # worked!!!
+            mention.reply(
+                '>Name: ' + str(get_rocket('falcon 9').name) + '    \n' +
+                '    \n' +
+                '>Cost per launch: $' + str(get_rocket('falcon 9').cost_per_launch) + '    \n' +
+                '    \n' +
+                '>Description: ' +
+                str(get_rocket('falcon 9').description) + '    \n'
+            )
+            print("Answered it!")
 
 
 post_number = 1
