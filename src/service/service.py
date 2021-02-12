@@ -15,3 +15,4 @@ class Service:
         for rocket in all_rockets:
             if name.lower() == rocket['name'].lower():
                 return Rocket(rocket['name'], rocket['cost_per_launch'], rocket['description'])
+        return Rocket([None], [None], [None])

@@ -1,13 +1,18 @@
 import praw
+
 from service.service import Service
+from strings.rocket_strings import RocketStrings
+
+from controller.controller import Controller
+from reply.reply import Reply
 
 # reddit credentials
 reddit = praw.Reddit(
-    client_id='x',
-    client_secret='x',
-    username='x',
-    password='x',
-    user_agent='x',
+    client_id='',
+    client_secret='',
+    username='',
+    password='',
+    user_agent='',
 )
 
 # initial configs
@@ -16,6 +21,8 @@ hot_posts = subreddit.hot(limit=None)
 
 
 # http requests
+
+
 def get_rocket(name):
     return Service.get_rocket(name)
 
@@ -26,46 +33,54 @@ def asking_about(ask):
 
 
 # collections of replies
-def answer_about(ask):
-    if ask == 'falcon 1':
-        print('Someone asked about Falcon 1! :D')
+def answer_about(message, mention):
 
-        mention.reply('Falcon 1 information!')
-        mention.mark_read()
-        print("Answered it!")
+    reply = Reply()
+    controller = Controller()
 
-    if ask == 'falcon 9':
-        print('Someone asked about Falcon 9! :D')
+    if message == RocketStrings._help:
+        reply.reply_help(mention)
 
-        if get_rocket('falcon 9').name != '':
-            # worked!!!
-            mention.reply(
-                '>Name: ' + str(get_rocket('falcon 9').name) + '    \n' +
-                '    \n' +
-                '>Cost per launch: $' + str(get_rocket('falcon 9').cost_per_launch) + '    \n' +
-                '    \n' +
-                '>Description: ' +
-                str(get_rocket('falcon 9').description) + '    \n'
-            )
-            mention.mark_read()
-            print("Answered it!")
+    if controller.is_valid_rocket(get_rocket(message)):
+        reply.reply_about(message, mention)
 
 
-post_number = 1
-# getting all subreddit posts
-for post in hot_posts:
-    if not post.stickied:
+def main():
 
-        print("I'm going try to find someone needing help with the " +
-              str(post_number) + "º post(s).")
-        # getting all unread mentions
-        for mention in reddit.inbox.unread(limit=None):
-            user_request = str(mention.body).lower()
+    post_number = 1
+    # getting all subreddit posts
+    for post in hot_posts:
+        if not post.stickied:
 
-            if user_request == asking_about('falcon 1'):
-                answer_about('falcon 1')
-            if user_request == asking_about('falcon 9'):
-                answer_about('falcon 9')
-    post_number += 1
+            print("I'm going try to find someone needing help with the " +
+                  str(post_number) + "º post(s).")
+            # getting all unread mentions
+            for mention in reddit.inbox.unread(limit=None):
+                user_request = str(mention.body).lower()
 
-print('That is! I am going to turn off... :/')
+                # help message
+                if user_request == asking_about(RocketStrings._help):
+                    answer_about(RocketStrings._help, mention)
+                    return
+                # rocket messages
+                if user_request == asking_about(RocketStrings.falcon_1):
+                    answer_about(RocketStrings.falcon_1, mention)
+                    return
+                if user_request == asking_about(RocketStrings.falcon_9):
+                    answer_about(RocketStrings.falcon_9, mention)
+                    return
+                if user_request == asking_about(RocketStrings.falcon_heavy):
+                    answer_about(RocketStrings.falcon_heavy, mention)
+                    return
+
+                # else...
+                reply = Reply()
+                reply.rocket_doesnt_exists(mention)
+
+        post_number += 1
+
+    print('That is! I am going to turn off... :/')
+
+
+if __name__ == "__main__":
+    main()
