@@ -1,31 +1,33 @@
 from typing import Any
 
+from model.rocket import Rocket
 from strings.rocket_strings import RocketStrings
 from service.service import Service
 
 
 class Reply:
 
-    def reply_about(self, message, mention: Any):
+    def reply_about(self, message, mention: Any, rocket: Rocket):
         print(self)
 
         if message == RocketStrings._help:
             print('Someone need help.')
             answer_help(mention)
+            print('I helped someone 1 :)')
 
         if message == RocketStrings.falcon_9:
             print('Someone asked about Falcon 9.')
-            answer_about_falcon_9(mention)
+            answer_about_falcon_9(mention, rocket)
             print('Answered.')
 
         if message == RocketStrings.falcon_1:
             print('Someone asked about Falcon 1.')
-            answer_about_falcon_1(mention)
+            answer_about_falcon_1(mention, rocket)
             print('Answered.')
 
         if message == RocketStrings.falcon_heavy:
             print('Someone asked about Falcon Heavy.')
-            answer_about_falcon_heavy(mention)
+            answer_about_falcon_heavy(mention, rocket)
             print('Answered.')
 
         mention.mark_read()
@@ -48,39 +50,37 @@ def answer_help(self, mention: Any):
         ">Here is your help manual"
     )
     mention.mark_read()
-    print("I helped someone! :)")
 
 
 # rockets
-def answer_about_falcon_9(mention):
+def answer_about_falcon_9(mention, rocket: Rocket):
     mention.reply(
-        '>Name: ' + str(Service.get_rocket(RocketStrings.falcon_9).name) + '    \n' +
+        '>Name: ' + str(rocket.name) + '    \n' +
         '    \n' +
-        '>Cost per launch: $' + str(Service.get_rocket(RocketStrings.falcon_9).cost_per_launch) + '    \n' +
+        '>Cost per launch: $' + str(rocket.cost_per_launch) + '    \n' +
         '    \n' +
         '>Description: ' +
-        str(Service.get_rocket(RocketStrings.falcon_9).description) + '    \n'
+        str(rocket.description) + '    \n'
     )
 
 
-def answer_about_falcon_1(mention):
+def answer_about_falcon_1(mention, rocket: Rocket):
     mention.reply(
-        '>Name: ' + str(Service.get_rocket(RocketStrings.falcon_1).name) + '    \n' +
+        '>Name: ' + str(rocket.name) + '    \n' +
         '    \n' +
-        '>Cost per launch: $' + str(Service.get_rocket(RocketStrings.falcon_1).cost_per_launch) + '    \n' +
+        '>Cost per launch: $' + str(rocket.cost_per_launch) + '    \n' +
         '    \n' +
         '>Description: ' +
-        str(Service.get_rocket(RocketStrings.falcon_1).description) + '    \n'
+        str(rocket.description) + '    \n'
     )
 
 
-def answer_about_falcon_heavy(mention):
+def answer_about_falcon_heavy(mention, rocket: Rocket):
     mention.reply(
-        '>Name: ' + str(Service.get_rocket(RocketStrings.falcon_heavy).name) + '    \n' +
+        '>Name: ' + str(rocket.name) + '    \n' +
         '    \n' +
-        '>Cost per launch: $' + str(Service.get_rocket(RocketStrings.falcon_heavy).cost_per_launch) + '    \n' +
+        '>Cost per launch: $' + str(rocket.cost_per_launch) + '    \n' +
         '    \n' +
         '>Description: ' +
-        str(Service.get_rocket(
-            RocketStrings.falcon_heavy).description) + '    \n'
+        str(rocket.description) + '    \n'
     )

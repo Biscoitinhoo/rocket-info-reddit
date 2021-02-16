@@ -1,5 +1,6 @@
 import praw
 
+from model.rocket import Rocket
 from service.service import Service
 from strings.rocket_strings import RocketStrings
 
@@ -38,11 +39,13 @@ def answer_about(message, mention):
     reply = Reply()
     controller = Controller()
 
-    if message == RocketStrings._help:
-        reply.reply_help(mention)
+    rocket = get_rocket(message)
 
-    if controller.is_valid_rocket(get_rocket(message)):
-        reply.reply_about(message, mention)
+    if message == RocketStrings._help:
+        reply.reply_about(RocketStrings._help, mention)
+
+    if controller.is_valid_rocket(rocket):
+        reply.reply_about(message, mention, rocket)
 
 
 def main():

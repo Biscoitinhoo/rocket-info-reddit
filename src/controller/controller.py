@@ -10,3 +10,6 @@ class Controller:
         # will be returned. so if some property are empty, the rocket
         # are invalid.
         return rocket.name != None
+
+    def get_valid_rocket(self):
+        return
